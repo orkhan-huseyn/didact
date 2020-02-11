@@ -4,7 +4,7 @@ function createElement(type, props, ...children) {
     props: {
       ...props,
       children: children.map(child =>
-        typeof child === "object" ? child : createTextElement(child)
+        typeof child === 'object' ? child : createTextElement(child)
       )
     }
   };
@@ -12,7 +12,7 @@ function createElement(type, props, ...children) {
 
 function createTextElement(text) {
   return {
-    type: "TEXT_ELEMENT",
+    type: 'TEXT_ELEMENT',
     props: {
       nodeValue: text,
       children: []
@@ -22,16 +22,16 @@ function createTextElement(text) {
 
 function createDom(fiber) {
   const dom =
-    fiber.type === "TEXT_ELEMENT"
-      ? document.createTextNode("")
+    fiber.type === 'TEXT_ELEMENT'
+      ? document.createTextNode('')
       : document.createElement(fiber.type);
 
   updateDom(dom, {}, fiber.props);
   return dom;
 }
 
-const isEvent = key => key.startsWith("on");
-const isProperty = key => key !== "children" && !isEvent(key);
+const isEvent = key => key.startsWith('on');
+const isProperty = key => key !== 'children' && !isEvent(key);
 const isNew = (prev, next) => key => prev[key] !== next[key];
 const isGone = (prev, next) => key => !(key in next);
 
@@ -49,7 +49,7 @@ function updateDom(dom, prevProps, nextProps) {
     .filter(isProperty)
     .filter(isGone(prevProps, nextProps))
     .forEach(name => {
-      dom[name] = "";
+      dom[name] = '';
     });
   // set new or changed properties
   Object.keys(nextProps)
@@ -85,11 +85,11 @@ function commitWork(fiber) {
 
   const parentDom = domParentFiber.dom;
 
-  if (fiber.effectTag === "PLACEMENT" && fiber.dom != null) {
+  if (fiber.effectTag === 'PLACEMENT' && fiber.dom != null) {
     parentDom.appendChild(fiber.dom);
-  } else if (fiber.effectTag === "UPDATE" && fiber.dom != null) {
+  } else if (fiber.effectTag === 'UPDATE' && fiber.dom != null) {
     updateDom(fiber.dom, fiber.alternate.props, fiber.props);
-  } else if (fiber.effectTag === "DELETION") {
+  } else if (fiber.effectTag === 'DELETION') {
     commitDeletion(fiber, parentDom);
   }
 
@@ -215,7 +215,7 @@ function reconcileChildren(wipFiber, elements) {
         dom: oldFiber.dom,
         parent: wipFiber,
         alternate: oldFiber,
-        effectTag: "UPDATE"
+        effectTag: 'UPDATE'
       };
     }
 
@@ -226,12 +226,12 @@ function reconcileChildren(wipFiber, elements) {
         dom: null,
         parent: wipFiber,
         alternate: null,
-        effectTag: "PLACEMENT"
+        effectTag: 'PLACEMENT'
       };
     }
 
     if (oldFiber && !sameType) {
-      oldFiber.effectTag = "DELETION";
+      oldFiber.effectTag = 'DELETION';
       deletions.push(oldFiber);
     }
 
